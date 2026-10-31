@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css">
+    <title>JOB APPLICATION FORM</title>
+  </head>
+  <body>
+    <div class="container">
+      <h3>Job Application Form</h3>
+      <p class="subtitle">Fill in your details to apply for postion</p>
+      <form action="#" class="form">
+        <div class="form-grp">
+          <label for="name">Full Name</label>
+          <input type="text" placeholder="Enter Your Name" id="name" required />
+        </div>
+        <div class="form-grp">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            placeholder="Enter Your Email"
+            id="email"
+            required
+          />
+        </div>
+        <div class="form-grp">
+          <label for="phone">Contace Info</label>
+          <input
+            type="tel"
+            placeholder="Enter Your Number"
+            id="phone"
+            maxlength="10"
+            pattern="[0-9]{10}"
+            required
+          />
+        </div>
+        <div class="form-grp">
+          <label for="job-postion">Position</label>
+          <select name="job position" id="job-position" required>
+            <option value="">select your Position</option>
+            <option value="frontend-developer">Frontend-developer</option>
+            <option value="backend-developer">Backend-developer</option>
+            <option value="mernstack">Mernstack</option>
+          </select>
+        </div>
+        <div class="form-grp">
+          <label for="resume">Upload Your Resume</label>
+          <input type="file" id="resume" name="resume" accept=".pdf, .doc, .docx"  required />
+        </div>
+        <div class="btn-grp">
+          <button type="submit" id="submit-btn">Submit your application</button>
+          <button type="reset" id="reset-btn">Reset </button>
+        </div>
+        <p id="message" role="status" aria-live="polite"></p>
+      </form>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
