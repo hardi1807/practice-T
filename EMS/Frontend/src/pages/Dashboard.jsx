@@ -1,32 +1,60 @@
-import React, { useEffect, useState } from 'react'
-import { employeeDashboardData } from '../assets/data'
-import { adminDahboardData } from '../assets/data'
-import Loading from '../components/Loading'
-import Employeedashboard from '../components/Employeedashboard'
-import Admindashboard from '../components/Admindashboard'
+
+import React, { useEffect, useState } from "react";
+
+import {
+  adminDahboardData,
+  employeeDashboardData,
+} from "../assets/data";
+
+import { useAuth } from "../context/AuthContext";
+
+import Admindashboard from "../components/Admindashboard";
+import Employeedashboard from "../components/Employeedashboard";
+import Loading from "../components/Loading";
 
 const Dashboard = () => {
+  const { user } = useAuth();
+console.log("Logged in user:", user);
+console.log("User role:", user?.role);
 
-  const [data, setData] = useState(null)
-  const [loading, setLoading] = useState(true)
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
- useEffect(()=>{
-  /*setData(employeeDashboardData) */
-  setData(adminDahboardData)
-  setTimeout(()=>{
-    setLoading(false)
-  },1000)
- },[])
+  useEffect(() => {
+    setLoading(true);
+    setData(null);
 
- if(loading) return <Loading />
- if(!data) return <p>failed to fetch dashboard</p>
+    const timer = setTimeout(() => {
+console.log("Dashboard useEffect running");
+      if (user?.role === "admin") {
+        setData(adminDahboardData);
+      } 
+      else if (user?.role === "employee") {
+        setData(employeeDashboardData);
+      }
 
- if(data.role === "ADMIN"){
-  return <Admindashboard data={data}/>
- } else {
-  return  <Employeedashboard data={data} />
- }
+      // IMPORTANT: Stop loading
+      setLoading(false);
 
-}
+    }, 500);
 
-export default Dashboard
+    return () => clearTimeout(timer);
+
+  }, [user]);
+
+  if (loading) {
+    return <Loading />;
+  }
+
+  if (!user || !data) {
+    return <div>Unable to load dashboard.</div>;
+  }
+
+  return user.role === "admin" ? (
+    <Admindashboard data={data} />
+  ) : (
+    <Employeedashboard data={data} />
+  );
+};
+
+export default Dashboard;

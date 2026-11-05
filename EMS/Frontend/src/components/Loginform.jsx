@@ -1,8 +1,14 @@
-import React from "react";
+
+import React, { useState } from "react";
 import LoginLeftside from "./LoginLeftside";
-import { Link } from "react-router-dom";
-import { ArrowLeft, EyeIcon, EyeOffIcon, Loader2Icon } from "lucide-react";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  ArrowLeft,
+  EyeIcon,
+  EyeOffIcon,
+  Loader2Icon,
+} from "lucide-react";
+import { useAuth } from "../context/AuthContext";
 
 const Loginform = ({ role, title, subtitle }) => {
   const [email, setEmail] = useState("");
@@ -11,8 +17,24 @@ const Loginform = ({ role, title, subtitle }) => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
+  const handleSubmit = (e) => {
     e.preventDefault();
+
+    setError("");
+    setLoading(true);
+
+    const result = login(email.trim().toLowerCase(), password, role);
+
+    if (result.success) {
+      navigate("/dashboard", { replace: true });
+    } else {
+      setError(result.message);
+    }
+
+    setLoading(false);
   };
 
   return (
@@ -21,6 +43,7 @@ const Loginform = ({ role, title, subtitle }) => {
 
       <div className="w-full md:w-1/2 flex items-center justify-center p-6 sm:p-12">
         <div className="w-full max-w-md animate-fade-in">
+
           <Link
             to="/login"
             className="inline-flex items-center gap-2 text-slate-400 hover:text-slate-700 text-sm mb-10 transition-colors"
@@ -38,18 +61,20 @@ const Loginform = ({ role, title, subtitle }) => {
               {subtitle}
             </p>
           </div>
+
           {error && (
             <div className="mb-6 p-4 bg-rose-50 border border-rose-200 text-rose-700 text-sm rounded-xl flex items-start gap-3">
-              <div className="w-1.5 h-1.5 rounded-full bf-rose-500 mt-1.5 shrink-0" />
+              <div className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
               {error}
             </div>
           )}
 
-          <form>
+          <form onSubmit={handleSubmit}>
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-2">
-                Email Adress
+                Email Address
               </label>
+
               <input
                 type="email"
                 value={email}
@@ -90,14 +115,18 @@ const Loginform = ({ role, title, subtitle }) => {
             </div>
 
             <button
-            type="submit"
-            disabled={loading}
-             className="w-full mt-5 py-3 bg-linear-to-r from-indigo-600 to-indigo-500 text-white rounded-md text-sm hover:from-indigo-700 disabled:opacity-50 transition-all duration-200 flex items-center justify-center">
-             {loading && <Loader2Icon 
-             className="animate-spin h-4 w-4 mr-2"/>}
-              Sign in
-              </button>
+              type="submit"
+              disabled={loading}
+              className="w-full mt-5 py-3 bg-linear-to-r from-indigo-600 to-indigo-500 text-white rounded-md text-sm hover:from-indigo-700 disabled:opacity-50 transition-all duration-200 flex items-center justify-center"
+            >
+              {loading && (
+                <Loader2Icon className="animate-spin h-4 w-4 mr-2" />
+              )}
+
+              {loading ? "Signing in..." : "Sign in"}
+            </button>
           </form>
+
         </div>
       </div>
     </div>

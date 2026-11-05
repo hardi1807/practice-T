@@ -1,3 +1,30 @@
+
+// ================= DEMO LOGIN USERS =================
+
+export const authUsers = [
+  {
+    id: 1,
+    email: "admin@gmail.com",
+    password: "admin123",
+    role: "admin",
+    firstName: "Admin",
+    lastName: "User",
+    image: "https://i.pravatar.cc/150?img=12",
+  },
+
+  {
+    id: 2,
+    email: "rahul.sharma@gmail.com",
+    password: "employee123",
+    role: "employee",
+    firstName: "Rahul",
+    lastName: "Sharma",
+    image: "https://i.pravatar.cc/150?img=47",
+  },
+];
+
+
+
 export const usersData = 
   {
     id: 1,
